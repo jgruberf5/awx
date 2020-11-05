@@ -5,7 +5,7 @@
 from collections import OrderedDict
 import logging
 import uuid
-
+import requests
 import ldap
 
 # Django
@@ -190,6 +190,102 @@ def _get_or_set_enterprise_user(username, password, provider):
     if created or user.is_in_enterprise_category(provider):
         return user
     logger.warn("Enterprise user %s already defined in Tower." % username)
+
+
+class BeaconBackend(object):
+    '''
+    Custom F5 Beacon auth backend for AWX
+    '''
+
+    def authenticate(self, request, username, password):
+        if not django_settings.BEACON_AUTH_URL:
+            return None
+        try:
+            headers = {
+                'Content-Type': 'application/json',
+                'Origin': 'https://portal.cloudservices.f5.com',
+                'Referer': 'https://portal.cloudservices.f5.com',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-site'
+            }
+            data = {
+                'username': username,
+                'password': password
+            }
+            resp = requests.post(django_settings.BEACON_AUTH_URL, headers=headers, json=data)
+            resp.raise_for_status()
+            self.auth_token = resp.json()['access_token']
+            user = _get_or_set_enterprise_user(username, password, 'beacon')
+            if not django_settings.BEACON_USER_URL:
+                return user
+            headers['Authorization'] = "Bearer %s" % self.auth_token
+            resp = requests.get(django_settings.BEACON_USER_URL, headers=headers)
+            resp.raise_for_status()
+            beacon_user = resp.json()
+            user.first_name = beacon_user['first_name']
+            user.last_name = beacon_user['last_name']
+            user.email = beacon_user['email']
+            user.save()
+            if django_settings.BEACON_ACCOUNT_URL:
+                self._set_organization_from_beacon_account(
+                    username, password, user, beacon_user['primary_account_id'])
+            return user
+        except Exception as e:
+            logger.exception("BeaconAuthentication Error: %s" % str(e))
+            return None
+
+
+    def get_user(self, user_id):
+        if not django_settings.BEACON_AUTH_URL:
+            return None
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
+
+    def _get_beacon_account(self, account_id):
+        if not django_settings.BEACON_ACCOUNT_URL:
+            return None
+        try:
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer %s" % self.auth_token
+            }
+            resp = requests.get(
+                "%s/%s" % (
+                    django_settings.BEACON_ACCOUNT_URL, account_id), 
+                headers=headers)
+            resp.raise_for_status()
+            return resp.json()
+        except Exception as e:
+            logger.exception("BeaconAccount Error: %s" % str(e))
+            return None
+
+
+    def _set_organization_from_beacon_account(self, username, password, user, account_id):
+        account = self._get_beacon_account(account_id)
+        if account:
+            from awx.main.models import Organization, CredentialType, Credential
+            org, created = Organization.objects.get_or_create(name=account['name'])
+            if created:
+                org.admin_role.members.add(user)
+                credential_type=CredentialType.objects.filter(namespace='beacon').first()
+                credential =  Credential()
+                credential.name = 'F5 Beacon Login'
+                credential.description = 'F5 Beacon Account Login'
+                credential.managed_by_tower = True
+                credential.credential_type = credential_type
+                credential.organization = org
+                credential.inputs = {
+                    "url": django_settings.BEACON_AUTH_URL,
+                    "username": username,
+                    "password": password
+                }
+                credential.save()
+            org.member_role.members.add(user)
+            org.save()
 
 
 class RADIUSBackend(BaseRADIUSBackend):

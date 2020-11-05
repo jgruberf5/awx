@@ -46,6 +46,10 @@
                 <div id="auth-azure-form"></div>
             </div>
 
+            <div ng-show="authVm.activeAuthForm === 'beacon'">
+                <div id="auth-beacon-form"></div>
+            </div>
+
             <div ng-show="authVm.activeAuthForm === 'github'">
                 <div id="auth-github-form"></div>
             </div>

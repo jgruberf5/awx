@@ -3,6 +3,7 @@
         <at-top-nav-item is-shown="missingLicense" class="at-Layout-topNavItem--logo">
             <a aria-label="{{'Navigate to dashboard' | translate}}" href="/#/">
                 <img ng-attr-aria-label="{{ $root.BRAND_NAME === 'Tower' ? $root.appStrings.get('logos.TOWER_LOGO') : $root.appStrings.get('logos.AWX_LOGO') }}" ng-src="/static/assets/logo-header.svg" />
+                <span style="font-weight: bold; padding: 10px;"> {{ $root.BRAND_NAME }} </span>
             </a>
         </at-top-nav-item>
         <div class="at-Layout-topNavRightAligner"></div>

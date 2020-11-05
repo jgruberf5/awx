@@ -301,6 +301,7 @@ KIND_CHOICES = {
     'github_token': 'GitHub Personal Access Token',
     'gitlab_token': 'GitLab Personal Access Token',
     'vault': 'Vault',
+    'beacon': 'F5 Beacon',
 }
 
 

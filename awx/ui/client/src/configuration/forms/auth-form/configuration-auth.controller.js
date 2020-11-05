@@ -89,6 +89,7 @@ export default [
 
         authVm.dropdownOptions = [
             {label: i18n._('Azure AD'), value: 'azure'},
+            {label: i18n._('F5 Beacon'), value: 'beacon'},
             {label: i18n._('GitHub'), value: 'github'},
             {label: i18n._('Google OAuth2'), value: 'google_oauth'},
             {label: i18n._('LDAP'), value: 'ldap'},
@@ -132,6 +133,11 @@ export default [
                 formDef: formDefs.azure,
                 id: 'auth-azure-form',
                 name: 'azure'
+            },
+            {
+                formDef: formDefs.beacon,
+                id: 'auth-beacon-form',
+                name: 'beacon'
             },
             {
                 formDef: formDefs.github,

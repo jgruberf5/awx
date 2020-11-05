@@ -697,6 +697,11 @@ docker-compose-isolated-build: docker-compose-build
 docker-clean:
 	$(foreach container_id,$(shell docker ps -f name=tools_awx -aq),docker stop $(container_id); docker rm -f $(container_id);)
 	docker images | grep "awx_devel" | awk '{print $$1 ":" $$2}' | xargs docker rmi
+	docker images | grep "awx" | awk '{print $$1 ":" $$2}' | xargs docker rmi
+
+docker-clean-prod:
+	$(foreach container_id,$(shell docker ps -f name=tools_awx -aq),docker stop $(container_id); docker rm -f $(container_id);)
+	docker images | grep "awx" | grep -v "sdist_builder" | awk '{print $$1 ":" $$2}' | xargs docker rmi
 
 docker-clean-volumes: docker-compose-clean
 	docker volume rm tools_awx_db

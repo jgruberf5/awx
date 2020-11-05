@@ -48,6 +48,13 @@ export default
                         scope.passwordLabel = i18n._('Password');
                         scope.hostPopOver = i18n._("Enter the hostname or IP address which corresponds to your VMware vCenter.");
                     break;
+                    case 'beacon':
+                        scope.url_required = true;
+                        scope.username_required = true;
+                        scope.password_required = true;
+                        scope.urlLabel = "F5 Beacon Auth URL";
+                        scope.passwordLabel = i18n._('Password');
+                    break;
                     case 'openstack':
                         scope.hostLabel = i18n._("Host (Authentication URL)");
                         scope.projectLabel = i18n._("Project (Tenant Name)");

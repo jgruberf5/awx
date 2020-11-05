@@ -6,6 +6,7 @@ export default [
     'Wait', 'configDataResolve', 'ToJSON', 'ConfigService',
     //Form definitions
     'configurationAzureForm',
+    'configurationBeaconFrom',
     'configurationGithubForm',
     'configurationGithubOrgForm',
     'configurationGithubTeamForm',
@@ -31,6 +32,7 @@ export default [
         Wait, configDataResolve, ToJSON, ConfigService,
         //Form definitions
         configurationAzureForm,
+        configurationBeaconFrom,
         configurationGithubForm,
         configurationGithubOrgForm,
         configurationGithubTeamForm,
@@ -58,6 +60,7 @@ export default [
 
         const formDefs = {
             'azure': configurationAzureForm,
+            'beacon': configurationBeaconFrom,
             'github': configurationGithubForm,
             'github_org': configurationGithubOrgForm,
             'github_team': configurationGithubTeamForm,

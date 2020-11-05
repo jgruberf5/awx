@@ -334,6 +334,7 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
+    'awx.sso.backends.BeaconBackend',
     'awx.sso.backends.LDAPBackend',
     'awx.sso.backends.LDAPBackend1',
     'awx.sso.backends.LDAPBackend2',
@@ -373,6 +374,13 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
     ldap.OPT_NETWORK_TIMEOUT: 30
 }
+
+# F5 Beacon service settings - should always be tried.
+# Note: These settings may be overridden by database settings
+
+BEACON_AUTH_URL = 'https://api.cloudservices.f5.com/v1/svc-auth/login'
+BEACON_USER_URL = 'https://api.cloudservices.f5.com/v1/svc-account/user'
+BEACON_ACCOUNT_URL = 'https://api.cloudservices.f5.com/v1/svc-account/accounts'
 
 # Radius server settings (default to empty string to skip using Radius auth).
 # Note: These settings may be overridden by database settings.

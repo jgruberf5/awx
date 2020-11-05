@@ -6,7 +6,7 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 # Otherwise the setup playbook will install the official Ansible images. Versions may
 # be selected based on: latest, 1, 1.0, 1.0.0, 1.0.0.123
 # by default the base will be used to search for ansible/awx
-dockerhub_base=ansible
+# dockerhub_base=ansible
 
 # Openshift Install
 # Will need to set -e openshift_password=developer -e docker_registry_password=$(oc whoami -t)
@@ -115,7 +115,7 @@ pg_port=5432
 # This will create or update a default admin (superuser) account in AWX, if not provided
 # then these default values are used
 admin_user=admin
-admin_password=password
+admin_password=BeaconOrchestrator
 
 # Whether or not to create preload data for demonstration purposes
 create_preload_data=True
@@ -133,7 +133,7 @@ secret_key=awxsecret
 # Build AWX with official logos
 # Requires cloning awx-logos repo as a sibling of this project.
 # Review the trademark guidelines at https://github.com/ansible/awx-logos/blob/master/TRADEMARKS.md
-# awx_official=false
+awx_official=true
 
 # Proxy
 #http_proxy=http://proxy:3128

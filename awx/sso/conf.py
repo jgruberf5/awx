@@ -425,6 +425,44 @@ _register_ldap('3')
 _register_ldap('4')
 _register_ldap('5')
 
+
+###############################################################################
+# F5 BEACON AUTHENTICATION SETTINGS
+###############################################################################
+register(
+    'BEACON_AUTH_URL',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='https://api.cloudservices.f5.com/v1/svc-auth/login',
+    label=_('F5 Beacon Authentication URL'),
+    help_text=_('URL for F5 Beacon Authentication API'),
+    category=_('F5 Beacon'),
+    category_slug='f5beacon',
+)
+
+register(
+    'BEACON_USER_URL',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='https://api.cloudservices.f5.com/v1/svc-account/user',
+    label=_('F5 Beacon User URL'),
+    help_text=_('URL for F5 Beacon User API'),
+    category=_('F5 Beacon'),
+    category_slug='f5beacon',
+)
+
+register(
+    'BEACON_ACCOUNT_URL',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='https://api.cloudservices.f5.com/v1/svc-account/accounts',
+    label=_('F5 Beacon Account URL'),
+    help_text=_('URL for F5 Beacon Account API'),
+    category=_('F5 Beacon'),
+    category_slug='f5beacon',
+)
+
+
 ###############################################################################
 # RADIUS AUTHENTICATION SETTINGS
 ###############################################################################

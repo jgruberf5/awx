@@ -1210,6 +1210,33 @@ ManagedCredentialType(
 )
 
 
+ManagedCredentialType(
+    namespace='beacon',
+    kind='cloud',
+    name=ugettext_noop('F5 Beacon Login'),
+    managed_by_tower=True,
+    inputs={
+        'fields': [{
+            'id': 'url',
+            'label': ugettext_noop('F5 Beacon Auth Endpoint'),
+            'type': 'string',
+            'choices': ['https://api.cloudservices.f5.com/v1/svc-auth/login'],
+            'help_text': ugettext_noop('Beacon Auth URL')
+        }, {
+            'id': 'username',
+            'label': ugettext_noop('Username'),
+            'type': 'string'
+        }, {
+            'id': 'password',
+            'label': ugettext_noop('Password'),
+            'type': 'string',
+            'secret': True,
+        }],
+        'required': ['url', 'username', 'password']
+    }
+)
+
+
 class CredentialInputSource(PrimordialModel):
 
     class Meta:
